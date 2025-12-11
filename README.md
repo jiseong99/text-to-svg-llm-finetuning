@@ -59,3 +59,107 @@ Each sample contains:
 - Sequence length fixed at 256  
 - Chat-style prompt formatting:
 
+## Training Parameters
+- Epochs: 5 (baseline setting)
+- Learning rate: 2e-4
+- Batch size: 292
+- Checkpoint frequency: every 100 steps
+- Gradient accumulation: disabled
+- LoRA target modules: `q_proj`, `k_proj`, `v_proj`, `o_proj`, `gate_proj`
+
+---
+
+## Results
+
+### Training Loss Comparison
+Across all tested models, Mistral 7B achieved the lowest training loss:
+
+| Model | Parameter Size | Training Loss |
+|-------|----------------|----------------|
+| T5 Base | 220M | ~2.062 |
+| T5 Small | 60M | ~0.970 |
+| Mistral 7B | 7B | ~0.616 |
+| Gemma3 1B | 1B | ~0.784 |
+| Gemma3 4B | 4B | ~1.027 |
+| Qwen2.5 Coder 3B | 3B | ~0.814 |
+| Qwen2.5 Coder 7B | 7B | ~1.456 |
+| Qwen2.5 Coder 14B | 14B | ~3.957 |
+
+---
+
+### Mistral 7B Parameter Experiments
+We further experimented with dataset sizes, epochs, and batch sizes:
+
+| Dataset Size | Epochs | Batch Size | Training Loss |
+|--------------|--------|------------|----------------|
+| 50,000 | 10 | 290 | 0.5734 |
+| 100,000 | 14 | 100 | 0.4775 |
+| 200,000 | 5 | 100 | 0.6498 |
+| 300,000 | 3 | 292 | 0.9872 |
+
+---
+
+## CLIP Evaluation
+We evaluated the fine-tuned Mistral 7B model on 100 unseen prompts.
+
+- Valid SVG outputs: 73  
+- Successfully rasterized SVGs: 71  
+- Average CLIP score: **27.4112%**
+
+### Quantitative Comparison
+
+| Method / Model | CLIP Score | Time per Prompt |
+|----------------|------------|------------------|
+| SVGDreamer | 0.360 | 35 min 12 sec |
+| DiffSketch | 0.310 | 10 min 22 sec |
+| CLIPDraw | 0.249 | 5 min 10 sec |
+| **Mistral 7B (Fine-tuned)** | **0.274** | **9 seconds** |
+
+The fine-tuned Mistral model provides a strong trade-off between quality and generation speed.
+
+---
+
+## Qualitative Results
+The fine-tuned model consistently generated:
+
+- Valid and compact SVG XML
+- Coherent geometric structures
+- Semantically aligned shapes, especially for black-and-white icons
+- Better boundary preservation than baseline LLMs (GPT-4o, Gemini)
+
+Examples include:
+- Circular arrow icons  
+- Chinese “love” character in stylized font  
+- Speech bubble icons  
+
+---
+
+## Conclusion
+Our experiments demonstrate the following:
+
+1. **Model capacity is important, but quality matters equally.**  
+   Mistral 7B performed better than larger models under identical training setups.
+
+2. **LLM-based SVG generation is extremely fast.**  
+   SVGs are generated in seconds, compared to minutes for diffusion-based methods.
+
+3. **Parameter-efficient fine-tuning (LoRA/QLoRA) is essential.**  
+   It enables training large models on academic hardware without loss in fidelity.
+
+---
+
+## Future Work
+- Incorporating iterative refinement using CLIP feedback  
+- Exploring code-focused LLMs (Code Llama, StarCoder)  
+- Multi-stage generation pipeline similar to Chat2SVG  
+- Automatic SVG syntax validation and error correction  
+
+---
+
+## Citation
+If you use this repository, please cite our project report:
+
+*CSE 575 Final Project Report — SVG Generation with Fine-Tuned LLMs*  
+:contentReference[oaicite:0]{index=0}
+
+
