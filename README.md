@@ -146,20 +146,4 @@ Our experiments demonstrate the following:
 3. **Parameter-efficient fine-tuning (LoRA/QLoRA) is essential.**  
    It enables training large models on academic hardware without loss in fidelity.
 
----
-
-## Future Work
-- Incorporating iterative refinement using CLIP feedback  
-- Exploring code-focused LLMs (Code Llama, StarCoder)  
-- Multi-stage generation pipeline similar to Chat2SVG  
-- Automatic SVG syntax validation and error correction  
-
----
-
-## Citation
-If you use this repository, please cite our project report:
-
-*CSE 575 Final Project Report — SVG Generation with Fine-Tuned LLMs*  
-:contentReference[oaicite:0]{index=0}
-
 
